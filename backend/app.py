@@ -3,24 +3,18 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import requests
 from werkzeug.security import generate_password_hash, check_password_hash
-from database_models import db, User, Mood, ChatHistory  # Import db explicitly
+from database_models import db, User, Mood, ChatHistory
 from datetime import datetime
 
-# Initialize SQLAlchemy
 app = Flask(__name__)
-
-# CORS Configuration (more flexibility for allowed origins)
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
-# Database setup
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
-# EdenAI API key
+
 EDENAI_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYmVhMGM0NjAtYjMwZS00NTc4LWI3ZDQtZDI4ZjQ2YTQ5ODk0IiwidHlwZSI6ImFwaV90b2tlbiJ9.dysGwh1pbER8jq7FcPR581qBWM055O7Swr7sN7OU-XQ"
 
-
-# Register a new user
 @app.route('/register', methods=['POST'])
 def register():
     data = request.json
@@ -35,7 +29,6 @@ def register():
     db.session.commit()
     return jsonify({"message": "User registered successfully"}), 201
 
-# Login user
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json
@@ -49,7 +42,7 @@ def login():
 
     return jsonify({"message": "Login successful"}), 200
 
-# Log mood
+# Mood Tracking Routes
 @app.route('/log-mood', methods=['POST'])
 def log_mood():
     try:
@@ -82,7 +75,94 @@ def log_mood():
         print(f"Error logging mood: {e}")
         return jsonify({"error": "Failed to log mood"}), 500
 
-# Chatbot interaction using EdenAI
+@app.route('/moods-history', methods=['GET'])
+def get_moods_history():
+    try:
+        mood_logs = Mood.query.order_by(Mood.timestamp.desc()).all()
+        
+        mood_data = [
+            {
+                "id": mood.id,
+                "mood": mood.mood,
+                "note": mood.note,
+                "timestamp": mood.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+            }
+            for mood in mood_logs
+        ]
+        
+        return jsonify(mood_data), 200
+    except Exception as e:
+        print(f"Error fetching mood history: {e}")
+        return jsonify({"error": "Failed to fetch mood history"}), 500
+
+@app.route('/mood-stats', methods=['GET'])
+def get_mood_stats():
+    try:
+        moods = Mood.query.all()
+        
+        # Initialize counts
+        happy_count = neutral_count = sad_count = 0
+        
+        # Count each type of mood
+        for mood in moods:
+            mood_type = mood.mood.strip()
+            if mood_type == "Happy":
+                happy_count += 1
+            elif mood_type == "Neutral":
+                neutral_count += 1
+            elif mood_type == "Sad":
+                sad_count += 1
+
+        total_moods = happy_count + neutral_count + sad_count
+
+        stats = {
+            "total_entries": total_moods,
+            "mood_counts": {
+                "Happy": happy_count,
+                "Neutral": neutral_count,
+                "Sad": sad_count
+            },
+            "percentages": {
+                "Happy": round((happy_count / total_moods * 100) if total_moods > 0 else 0, 1),
+                "Neutral": round((neutral_count / total_moods * 100) if total_moods > 0 else 0, 1),
+                "Sad": round((sad_count / total_moods * 100) if total_moods > 0 else 0, 1)
+            }
+        }
+
+        return jsonify(stats), 200
+    except Exception as e:
+        print(f"Error calculating stats: {e}")
+        return jsonify({
+            "total_entries": 0,
+            "mood_counts": {"Happy": 0, "Neutral": 0, "Sad": 0},
+            "percentages": {"Happy": 0, "Neutral": 0, "Sad": 0}
+        }), 200
+
+@app.route('/clear_history', methods=['DELETE'])
+def clear_history():
+    try:
+        Mood.query.delete()
+        db.session.commit()
+        return jsonify({"message": "All moods cleared successfully"}), 200
+    except Exception as e:
+        print(f"Error clearing history: {e}")
+        return jsonify({"error": "Failed to clear history"}), 500
+
+@app.route('/delete_mood/<int:mood_id>', methods=['DELETE'])
+def delete_mood(mood_id):
+    try:
+        mood = Mood.query.get(mood_id)
+        if not mood:
+            return jsonify({"error": "Mood not found"}), 404
+            
+        db.session.delete(mood)
+        db.session.commit()
+        return jsonify({"message": "Mood deleted successfully"}), 200
+    except Exception as e:
+        print(f"Error deleting mood: {e}")
+        return jsonify({"error": "Failed to delete mood"}), 500
+
+# Chatbot Route
 @app.route('/chatbot', methods=['POST'])
 def chatbot():
     user_message = request.json.get("message")
@@ -141,146 +221,6 @@ def chatbot():
         return jsonify({
             "error": "An unexpected error occurred. Please try again later."
         }), 500
-
-# Get mood history
-@app.route('/moods-history', methods=['GET'])
-def get_moods_history():
-    try:
-        mood_logs = Mood.query.order_by(Mood.timestamp.desc()).all()
-        
-        if not mood_logs:
-            return jsonify([]), 200
-        
-        mood_data = [
-            {
-                "id": mood.id,
-                "mood": mood.mood,
-                "note": mood.note,
-                "timestamp": mood.timestamp.strftime('%Y-%m-%d %H:%M:%S')
-            }
-            for mood in mood_logs
-        ]
-        
-        return jsonify(mood_data), 200
-    except Exception as e:
-        print(f"Error fetching mood history: {e}")
-        return jsonify({"error": "Failed to fetch mood history"}), 500
-
-# Get mood statistics
-@app.route('/mood-stats', methods=['GET'])
-def get_mood_stats():
-    try:
-        # Get all moods
-        moods = Mood.query.all()
-        
-        # Initialize counts
-        happy_count = 0
-        neutral_count = 0
-        sad_count = 0
-        
-        # Count each type of mood
-        for mood in moods:
-            mood_type = mood.mood.strip()  # Remove any whitespace
-            if mood_type == "Happy":
-                happy_count += 1
-            elif mood_type == "Neutral":
-                neutral_count += 1
-            elif mood_type == "Sad":
-                sad_count += 1
-
-        # Calculate total of valid moods
-        total_moods = happy_count + neutral_count + sad_count
-
-        # Prepare response with safe values
-        stats = {
-            "total_entries": total_moods,
-            "mood_counts": {
-                "Happy": happy_count,
-                "Neutral": neutral_count,
-                "Sad": sad_count
-            },
-            "percentages": {
-                "Happy": round((happy_count / total_moods * 100) if total_moods > 0 else 0, 1),
-                "Neutral": round((neutral_count / total_moods * 100) if total_moods > 0 else 0, 1),
-                "Sad": round((sad_count / total_moods * 100) if total_moods > 0 else 0, 1)
-            }
-        }
-
-        return jsonify(stats), 200
-
-    except Exception as e:
-        print(f"Error calculating stats: {e}")
-        # Return safe default values if anything goes wrong
-        return jsonify({
-            "total_entries": 0,
-            "mood_counts": {
-                "Happy": 0,
-                "Neutral": 0,
-                "Sad": 0
-            },
-            "percentages": {
-                "Happy": 0,
-                "Neutral": 0,
-                "Sad": 0
-            }
-        }), 200
-
-# Modify the clear_history route
-@app.route('/clear_history', methods=['DELETE'])
-def clear_history():
-    try:
-        # Store deleted moods in backup
-        deleted_moods = Mood.query.all()
-        
-        # Create backup of moods before deletion
-        mood_backup.backup_data = [{
-            "id": mood.id,
-            "mood": mood.mood,
-            "note": mood.note,
-            "timestamp": mood.timestamp.strftime('%Y-%m-%d %H:%M:%S')
-        } for mood in deleted_moods]
-        mood_backup.timestamp = datetime.now()
-        
-        # Clear all moods
-        Mood.query.delete()
-        db.session.commit()
-        
-        return jsonify({
-            "message": "All moods cleared successfully",
-            "backup_available": True
-        }), 200
-    except Exception as e:
-        print(f"Error clearing mood history: {e}")
-        return jsonify({"error": "Failed to clear mood history"}), 500
-
-# Add new route for undo
-
-
-@app.route('/delete_mood/<int:mood_id>', methods=['DELETE'])
-def delete_mood(mood_id):
-    try:
-        mood = Mood.query.get(mood_id)
-        if not mood:
-            return jsonify({"error": "Mood entry not found"}), 404
-        
-        # Store the mood data before deletion
-        deleted_mood_data = {
-            "id": mood.id,
-            "mood": mood.mood,
-            "note": mood.note,
-            "timestamp": mood.timestamp.strftime('%Y-%m-%d %H:%M:%S')
-        }
-        
-        db.session.delete(mood)
-        db.session.commit()
-        
-        return jsonify({
-            "message": "Mood deleted successfully",
-            "deleted_mood": deleted_mood_data
-        }), 200
-    except Exception as e:
-        print(f"Error deleting mood: {e}")
-        return jsonify({"error": "Failed to delete mood"}), 500
 
 # Run the app
 if __name__ == "__main__":

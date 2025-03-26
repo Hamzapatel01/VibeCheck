@@ -51,10 +51,10 @@ const Login = () => {
 
             <form onSubmit={handleLogin}>
               <div className="input-group">
-                <label>Email</label>
+                <label>Username</label>
                 <input
-                  type="email"
-                  placeholder="Enter your email"
+                  type="text"
+                  placeholder="Enter your username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required

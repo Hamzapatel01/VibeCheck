@@ -98,11 +98,9 @@ def get_moods_history():
 @app.route('/mood-stats', methods=['GET'])
 def get_mood_stats():
     try:
-        moods = Mood.query.all()
-        
+        moods = Mood.query.all() 
         # Initialize counts
         happy_count = neutral_count = sad_count = 0
-        
         # Count each type of mood
         for mood in moods:
             mood_type = mood.mood.strip()
@@ -199,8 +197,6 @@ def chatbot():
             return jsonify({"error": "Failed to get response from EdenAI"}), 500
 
         bot_reply = response.json().get('openai', {}).get('generated_text', "I apologize, but I'm having trouble responding right now.")
-
-        # Store the chat history
         chat_entry = ChatHistory(
             user_message=user_message,
             bot_response=bot_reply,
@@ -210,19 +206,12 @@ def chatbot():
         db.session.commit()
 
         return jsonify({"response": bot_reply})
-
-    except requests.exceptions.RequestException as e:
-        print(f"Network Error: {str(e)}")
-        return jsonify({
-            "error": "There was a problem connecting to the chat service. Please try again."
-        }), 503
     except Exception as e:
         print(f"Unexpected Error in chatbot: {str(e)}")
         return jsonify({
             "error": "An unexpected error occurred. Please try again later."
         }), 500
 
-# Run the app
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()

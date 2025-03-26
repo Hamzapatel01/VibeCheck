@@ -89,7 +89,6 @@ VibeCheck is a supportive mental health tracking application designed to help in
 - All passwords are securely hashed
 - User data is protected and private
 - Secure API endpoints with proper authentication
-- Regular security updates and maintenance
 
 ## 🤝 Contributing
 
@@ -103,12 +102,6 @@ We welcome contributions to improve VibeCheck! Please feel free to:
 ## 📝 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- Thanks to all contributors who have helped shape VibeCheck
-- Special thanks to the mental health community for their valuable feedback
-- Built with ❤️ for those on their mental health journey
 
 ## 📞 Support
 

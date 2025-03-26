@@ -1,0 +1,27 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primaryColor: #581b98;
+  --primaryGradient: linear-gradient(93.12deg, #581b98 0.52%, #9c1de7 100%);
+  --secondaryGradient: linear-gradient(268.91deg, #581b98 -2.14%, #9c1de7 99.69%);
+  --boxShadowLight: 0px 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+body.login-page {
+  font-family: "Nunito", sans-serif;
+  background: #f1f1f1;
+  width: 100%;
+  height: 100%;
+  background-image: url('../assets/michelle-spollen-dC2FsjoXsPQ-unsplash.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+} 

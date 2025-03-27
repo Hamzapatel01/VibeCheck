@@ -1,25 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from "chart.js";
-import DeleteConfirmModal from '../components/Report/DeleteConfirmModal';
-import UndoAlert from '../components/Report/UndoAlert';
-import ReportHeader from '../components/Report/ReportHeader';
-import MoodInsights from '../components/Report/MoodInsights';
-import AdditionalInsights from '../components/Report/AdditionalInsights';
-import MoodChart from '../components/Report/MoodChart';
-import MoodHistory from '../components/Report/MoodHistory';
 import useMoodHistory from '../hooks/useMoodHistory';
 import { getMoodInsights, formatTimestamp } from '../utils/moodUtils';
 import { getChartData, chartOptions } from '../utils/chartConfig';
 import { useMood } from '../Context/MoodContext';
+import MoodInsights from '../components/Report/MoodInsights';
+import MoodChart from '../components/Report/MoodChart';
+import MoodHistory from '../components/Report/MoodHistory';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
 const Report = () => {
   const navigate = useNavigate();
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [deleteMoodId, setDeleteMoodId] = useState(null);
-  const [showUndoAlert, setShowUndoAlert] = useState(false);
   const { moodHistory, fetchMoodHistory } = useMood();
 
   const {
@@ -65,50 +58,29 @@ const Report = () => {
 
   return (
     <div className="report-container">
-      <UndoAlert 
-        type="all"
-        isVisible={showUndoAlert}
-        onUndo={actions.fetchMoodHistory}
-        onClose={() => setShowUndoAlert(false)}
-      />
+      <div className="report-header">
+        <h1>Your Mood Report</h1>
+        <div className="report-actions">
+          <button className="report-btn download-report" onClick={() => {/* implement download logic */}}>
+            Download Report
+          </button>
+          <button className="report-btn clear-history" onClick={() => {/* implement clear history logic */}}>
+            Clear History
+          </button>
+        </div>
+      </div>
 
-      <ReportHeader 
-        onDownload={() => {/* implement download logic */}} 
-        onClear={() => setShowDeleteConfirm(true)} 
-      />
-
-      <MoodInsights insights={insights} />
-      <AdditionalInsights insights={insights} />
-      <MoodChart data={chartData} options={chartOptions} />
-      <MoodHistory 
-        history={moodHistory} 
-        onDelete={(id) => {
-          setDeleteMoodId(id);
-          setShowDeleteConfirm(true);
-        }}
-      />
-
-      <DeleteConfirmModal 
-        isOpen={showDeleteConfirm}
-        moodId={deleteMoodId}
-        onClose={() => {
-          setShowDeleteConfirm(false);
-          setDeleteMoodId(null);
-        }}
-        onConfirm={async () => {
-          if (deleteMoodId) {
-            await actions.deleteMood(deleteMoodId);
+      <div className="report-content">
+        <MoodInsights insights={insights} history={moodHistory} />
+        <MoodChart data={chartData} options={chartOptions} />
+        <MoodHistory 
+          history={moodHistory} 
+          onDelete={async (id) => {
+            await actions.deleteMood(id);
             await fetchMoodHistory();
-          } else {
-            const success = await actions.clearHistory();
-            if (success) {
-              setShowUndoAlert(true);
-            }
-          }
-          setShowDeleteConfirm(false);
-          setDeleteMoodId(null);
-        }}
-      />
+          }}
+        />
+      </div>
     </div>
   );
 };

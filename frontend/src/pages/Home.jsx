@@ -25,7 +25,7 @@ const Home = () => {
         <section className="hero">
           <div className="hero-content">
             <h1 className="hero-title">
-              <span className="text-gradient">Welcome to Menti Track</span><br />
+              <span className="text-gradient">Welcome to VibeCheck</span><br />
               Your Mental Health Companion
             </h1>
             <p className="hero-subtitle">

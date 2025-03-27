@@ -28,7 +28,7 @@ const MoodHistory = ({ history, onDelete }) => {
                   {entry.mood}
                 </span>
               </td>
-              <td>{entry.notes || "No notes provided"}</td>
+              <td>No notes provided</td>
               <td className="action-cell">
                 <button 
                   className="delete-btn"

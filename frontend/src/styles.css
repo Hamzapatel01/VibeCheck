@@ -1003,154 +1003,160 @@ body {
 
 /* Mood Insights Section */
 .mood-insights {
-    background: rgba(100, 100, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
+    padding: 24px;
+    margin-bottom: 24px;
 }
 
 .insights-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
 }
 
-.insight-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.733);
-    border-radius: 12px;
+.insight-card {
     background: rgba(255, 255, 255, 0.05);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.insight-label {
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-}
-
-.insight-value {
-    color: var(--primary-color);
-    font-size: 1rem;
-    font-weight: 500;
-}
-
-/* Additional Insights Section */
-.additional-insights {
-    background: rgba(255, 150, 150, 0.15);
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.additional-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-}
-
-.additional-item {
+    border-radius: 8px;
+    padding: 16px;
     text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.additional-label {
+.insight-card h3 {
     color: var(--text-secondary);
-    font-size: 0.875rem;
-    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
 }
 
-.additional-value {
+.insight-card p {
     color: var(--primary-color);
-    font-size: 1rem;
-    font-weight: 500;
+    font-size: 1.5rem;
+    font-weight: 600;
 }
 
-/* Mood Trend Section */
-.mood-trend {
+.insight-card .mood-count {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.insight-card .mood-count.happy {
+    color: #4CAF50;
+}
+
+.insight-card .mood-count.neutral {
+    color: #FFC107;
+}
+
+.insight-card .mood-count.sad {
+    color: #F44336;
+}
+
+/* Mood History Table Styles */
+.history-table-container {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.trend-header {
-    margin-bottom: 1rem;
-}
-
-.trend-header h2 {
-    font-size: 1.25rem;
-    color: var(--primary-color);
-}
-
-.trend-chart {
-    height: 300px;
-    position: relative;
-}
-
-/* Mood History Section */
-.mood-history {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    padding: 1.5rem;
+    padding: 24px;
+    margin-top: 24px;
+    overflow-x: auto;
 }
 
 .history-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 16px;
 }
 
 .history-table th,
 .history-table td {
-    padding: 1rem;
+    padding: 16px;
     text-align: left;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .history-table th {
+    background: rgba(255, 255, 255, 0.05);
+    font-weight: 600;
     color: var(--text-secondary);
-    font-weight: 500;
-    font-size: 0.875rem;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
 }
 
-.history-table td {
-    color: var(--primary-color);
+.history-table tr:last-child td {
+    border-bottom: none;
+}
+
+.history-table tr:hover {
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .mood-tag {
     display: inline-block;
-    padding: 0.25rem 0.75rem;
-    border-radius: 12px;
-    font-size: 0.875rem;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
 .mood-tag.happy {
-    background: rgba(76, 175, 80, 0.2);
-    color: #4caf50;
+    background: rgba(76, 175, 80, 0.1);
+    color: #4CAF50;
+}
+
+.mood-tag.neutral {
+    background: rgba(255, 193, 7, 0.1);
+    color: #FFC107;
 }
 
 .mood-tag.sad {
-    background: rgba(244, 67, 54, 0.2);
-    color: #f44336;
+    background: rgba(244, 67, 54, 0.1);
+    color: #F44336;
+}
+
+.notes-cell {
+    max-width: 300px;
+    white-space: normal;
+    word-wrap: break-word;
+    line-height: 1.4;
 }
 
 .action-cell {
+    width: 60px;
     text-align: center;
 }
 
 .delete-btn {
-    background: transparent;
+    background: none;
     border: none;
-    color: #ff4d4d;
+    color: var(--text-secondary);
     cursor: pointer;
-    padding: 0.25rem;
+    padding: 8px;
     border-radius: 4px;
-    transition: background-color 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .delete-btn:hover {
-    background: rgba(255, 77, 77, 0.1);
+    background: rgba(244, 67, 54, 0.1);
+    color: #F44336;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .insights-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .history-table th,
+    .history-table td {
+        padding: 12px;
+    }
+
+    .notes-cell {
+        max-width: 200px;
+    }
 }
 
 /* Chat Page Styles */
@@ -1427,7 +1433,6 @@ body {
     background: rgba(100, 255, 218, 0.1);
 }
 
-
 .special-card{
     width: 1000px;
 }
@@ -1457,7 +1462,6 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    animation: modalFadeIn 0.3s ease-out;
   }
   
   .modal-content h3 {
@@ -1509,115 +1513,6 @@ body {
   }
   
   /* Undo Alert Styles */
-  .undo-alert {
-    position: fixed;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #1a1a2e;
-    border-radius: 8px;
-    padding: 1rem 1.5rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 1000;
-    animation: slideUp 0.3s ease-out;
-  }
-  
-  .undo-alert-content {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-  }
-  
-  .undo-alert-content span {
-    color: #fff;
-  }
-  
-  .undo-alert-actions {
-    display: flex;
-    gap: 1rem;
-  }
-  
-  .undo-btn, .close-btn {
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    border: none;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .undo-btn {
-    background: #64ffda;
-    color: #1a1a2e;
-  }
-  
-  .undo-btn:hover {
-    background: #5ce6c4;
-  }
-  
-  .close-btn {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-  }
-  
-  .close-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
-  
-  /* Animations */
-  @keyframes modalFadeIn {
-    from {
-      opacity: 0;
-      transform: translate(-50%, -48%);
-    }
-    to {
-      opacity: 1;
-      transform: translate(-50%, -50%);
-    }
-  }
-  
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translate(-50%, 20px);
-    }
-    to {
-      opacity: 1;
-      transform: translate(-50%, 0);
-    }
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .modal-content {
-      width: 95%;
-      padding: 1.5rem;
-    }
-  
-    .modal-actions {
-      flex-direction: column;
-    }
-  
-    .action-btn {
-      width: 100%;
-    }
-  
-    .undo-alert {
-      width: 90%;
-    }
-  
-    .undo-alert-content {
-      flex-direction: column;
-      gap: 1rem;
-      text-align: center;
-    }
-  
-    .undo-alert-actions {
-      justify-content: center;
-    }
-  } 
-
   /* Mood Input Form Styles */
 .mood-select select {
   width: 100%;
@@ -1629,19 +1524,12 @@ body {
   font-size: 1rem;
   cursor: pointer;
   appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 12px center;
   background-size: 16px;
 }
 
-.mood-select select:focus {
-  outline: none;
-  border-color: #64ffda;
-  box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.2);
-}
 
 .mood-select select option {
   background-color: #1a1a2e;
@@ -1666,11 +1554,6 @@ body {
   min-height: 100px;
 }
 
-.note-input textarea:focus {
-  outline: none;
-  border-color: #64ffda;
-  box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.2);
-}
 
 /* Form Labels */
 .mood-select label,
@@ -1787,83 +1670,6 @@ body {
   color: #ff4d4d;
   font-size: 1.25rem;
 }
-
-/* Modal Styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: rgba(26, 26, 46, 0.95);
-  border-radius: 15px;
-  padding: 2rem;
-  max-width: 500px;
-  width: 90%;
-  text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-.modal-content h3 {
-  color: #64ffda;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-}
-
-.modal-content p {
-  color: var(--text-secondary);
-  margin-bottom: 2rem;
-  line-height: 1.6;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-}
-
-.modal-actions button {
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 120px;
-}
-
-.modal-actions .cancel-btn {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--primary-color);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.modal-actions .confirm-btn {
-  background: #64ffda;
-  color: var(--bg-dark);
-  border: none;
-}
-
-.modal-actions button:hover {
-  transform: translateY(-2px);
-}
-
-.modal-actions .cancel-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.modal-actions .confirm-btn:hover {
-  opacity: 0.9;
-}
-
 /* Emergency Helpline Styles */
 .contact-container {
   max-width: 1200px;

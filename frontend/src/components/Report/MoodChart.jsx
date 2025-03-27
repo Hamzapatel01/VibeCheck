@@ -1,11 +1,7 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 
-const MoodChart = ({ data, options, isLoading }) => {
-  if (isLoading) {
-    return <div className="loading">Loading chart data...</div>;
-  }
-
+const MoodChart = ({ data, options }) => {
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -37,14 +33,12 @@ const MoodChart = ({ data, options, isLoading }) => {
   };
 
   return (
-    <section className="mood-trend">
-      <div className="trend-header">
-        <h2>Mood Trend</h2>
-      </div>
+    <div className="mood-trend">
+      <h2>Mood Trend</h2>
       <div className="trend-chart">
         <Line data={data} options={chartOptions} />
       </div>
-    </section>
+    </div>
   );
 };
 

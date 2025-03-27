@@ -14,10 +14,9 @@ const Home = () => {
     navigate('/login');
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Add your login logic here
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  // };
 
   return (
     <div className="home-container">

@@ -1,5 +1,3 @@
-# VibeCheck
-=======
 # VibeCheck - Your Mental Health Companion
 
 VibeCheck is a supportive mental health tracking application designed to help individuals monitor their emotional well-being and receive personalized support. This application combines mood tracking, emotional insights, and AI-powered support to create a safe space for mental health management.

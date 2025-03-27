@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # VibeCheck
 =======
 # VibeCheck - Your Mental Health Companion
@@ -115,4 +114,3 @@ For technical support or questions about VibeCheck, please open an issue in the 
 ---
 
 Made with ❤️ for better mental health
->>>>>>> e787b191a72588fc6aaecc79148f699054812d3d

@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // When the app starts, check if user is already logged in
+  // When the app starts, check if user is already logged 
   useEffect(() => {
     const checkIfUserIsLoggedIn = () => {
       // Check localStorage for login status

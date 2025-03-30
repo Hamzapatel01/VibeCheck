@@ -34,7 +34,6 @@ export const getMoodInsights = (moodHistory) => {
     else if (moodType === 'sad') moodCounts.Sad++;
   }
 
-  // Calculate total entries
   const totalEntries = moodCounts.Happy + moodCounts.Neutral + moodCounts.Sad;
 
   // Calculate percentages with safe division and string conversion
@@ -57,7 +56,7 @@ export const getMoodInsights = (moodHistory) => {
     } else if (moodCounts.Sad > moodCounts.Happy && moodCounts.Sad > moodCounts.Neutral) {
       dominantMood = 'Sad';
     } else {
-      dominantMood = 'Mixed';  // In case of ties
+      dominantMood = 'Mixed';  
     }
   }
 

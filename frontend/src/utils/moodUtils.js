@@ -34,7 +34,6 @@ export const getMoodInsights = (moodHistory) => {
     else if (moodType === 'sad') moodCounts.Sad++;
   }
 
-  // Calculate total entries
   const totalEntries = moodCounts.Happy + moodCounts.Neutral + moodCounts.Sad;
 
   // Calculate percentages with safe division and string conversion

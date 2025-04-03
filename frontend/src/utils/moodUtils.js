@@ -57,7 +57,7 @@ export const getMoodInsights = (moodHistory) => {
     } else if (moodCounts.Sad > moodCounts.Happy && moodCounts.Sad > moodCounts.Neutral) {
       dominantMood = 'Sad';
     } else {
-      dominantMood = 'Mixed';  // In case of ties
+      dominantMood = 'Mixed';  
     }
   }
 

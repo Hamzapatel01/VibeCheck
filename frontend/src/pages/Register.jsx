@@ -9,7 +9,10 @@ const Register = () => {
     username: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    first_name: "",
+    last_name: "",
+    date_of_birth: ""
   });
   
   const [error, setError] = useState("");
@@ -43,7 +46,11 @@ const Register = () => {
     try {
       const response = await axios.post("http://127.0.0.1:5000/register", {
         username: formData.username,
-        password: formData.password
+        password: formData.password,
+        email: formData.email,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        date_of_birth: formData.date_of_birth
       });
 
       if (response.status === 201) {
@@ -54,7 +61,7 @@ const Register = () => {
       }
     } catch (err) {
       if (err.response?.status === 400) {
-        setError("Username already exists");
+        setError(err.response.data.error || "Registration failed");
       } else {
         setError("Registration failed. Please try again.");
       }
@@ -95,6 +102,41 @@ const Register = () => {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="Enter your email"
+                  required
+                />
+              </div>
+
+              <div className="input-group">
+                <label>First Name</label>
+                <input
+                  type="text"
+                  name="first_name"
+                  value={formData.first_name}
+                  onChange={handleChange}
+                  placeholder="Enter your first name"
+                  required
+                />
+              </div>
+
+              <div className="input-group">
+                <label>Last Name</label>
+                <input
+                  type="text"
+                  name="last_name"
+                  value={formData.last_name}
+                  onChange={handleChange}
+                  placeholder="Enter your last name"
+                  required
+                />
+              </div>
+
+              <div className="input-group">
+                <label>Date of Birth</label>
+                <input
+                  type="date"
+                  name="date_of_birth"
+                  value={formData.date_of_birth}
+                  onChange={handleChange}
                   required
                 />
               </div>

@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useCallback } from 'react';
 import axios from 'axios';
+import { useAuth } from './AuthContext';
 
 // Create the context
 const MoodContext = createContext(null);
@@ -9,12 +10,20 @@ export const MoodProvider = ({ children }) => {
   const [moodHistory, setMoodHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { userData } = useAuth();
 
   // Fetch mood history
   const fetchMoodHistory = useCallback(async () => {
+    if (!userData?.username) {
+      setError('User not logged in');
+      return;
+    }
+
     setIsLoading(true);
     try {
-      const response = await axios.get('http://127.0.0.1:5000/moods-history');
+      const response = await axios.get('http://127.0.0.1:5000/moods-history', {
+        params: { username: userData.username }
+      });
       setMoodHistory(response.data);
       setError(null);
     } catch (err) {
@@ -23,13 +32,21 @@ export const MoodProvider = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [userData]);
 
   // Log new mood
   const logMood = useCallback(async (moodData) => {
+    if (!userData?.username) {
+      setError('User not logged in');
+      return false;
+    }
+
     setIsLoading(true);
     try {
-      const response = await axios.post('http://127.0.0.1:5000/log-mood', moodData);
+      const response = await axios.post('http://127.0.0.1:5000/log-mood', {
+        ...moodData,
+        username: userData.username
+      });
       setMoodHistory(prev => [...prev, response.data.mood]);
       setError(null);
       return true;
@@ -40,7 +57,7 @@ export const MoodProvider = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [userData]);
 
   const value = {
     moodHistory,

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 const useMoodHistory = () => {
   const [moodHistory, setMoodHistory] = useState([]);
@@ -7,13 +8,18 @@ const useMoodHistory = () => {
   const [error, setError] = useState(null);
   const [deletedMoods, setDeletedMoods] = useState([]);
   const [deletedMood, setDeletedMood] = useState(null);
+  const { userData } = useAuth();
 
   const fetchMoodHistory = async () => {
+    if (!userData?.username) {
+      setError('User not logged in');
+      return;
+    }
+
     try {
       setIsLoading(true);
-      const token = localStorage.getItem("token");
       const response = await axios.get("http://127.0.0.1:5000/moods-history", {
-        headers: { Authorization: `Bearer ${token}` }
+        params: { username: userData.username }
       });
       setMoodHistory(response.data);
       setError(null);
@@ -27,15 +33,8 @@ const useMoodHistory = () => {
 
   const deleteMood = async (moodId) => {
     try {
-      const token = localStorage.getItem("token");
-      await axios.delete(`http://127.0.0.1:5000/delete_mood/${moodId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      
-      const deletedEntry = moodHistory.find(entry => entry._id === moodId);
-      setDeletedMood(deletedEntry);
-      setMoodHistory(prevHistory => prevHistory.filter(entry => entry._id !== moodId));
-      
+      await axios.delete(`http://127.0.0.1:5000/delete_mood/${moodId}`);
+      setMoodHistory(prevHistory => prevHistory.filter(entry => entry.id !== moodId));
       return true;
     } catch (error) {
       console.error("Error deleting mood:", error);
@@ -45,12 +44,7 @@ const useMoodHistory = () => {
 
   const clearHistory = async () => {
     try {
-      const token = localStorage.getItem("token");
-      await axios.delete("http://127.0.0.1:5000/clear_history", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      
-      setDeletedMoods(moodHistory);
+      await axios.delete("http://127.0.0.1:5000/clear_history");
       setMoodHistory([]);
       return true;
     } catch (error) {
@@ -61,7 +55,7 @@ const useMoodHistory = () => {
 
   useEffect(() => {
     fetchMoodHistory();
-  }, []);
+  }, [userData]);
 
   return {
     moodHistory,
@@ -78,6 +72,6 @@ const useMoodHistory = () => {
       setDeletedMood
     }
   };
-}; 
+};
 
 export default useMoodHistory;

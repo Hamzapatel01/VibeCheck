@@ -3,32 +3,40 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  // Track if user is logged in
+  // Track if user is logged in and store user data
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   // When the app starts, check if user is already logged 
   useEffect(() => {
     const checkIfUserIsLoggedIn = () => {
-      // Check localStorage for login status
+      // Check localStorage for login status and user data
       const isLoggedIn = localStorage.getItem("isAuthenticated") === "true";
+      const storedUserData = localStorage.getItem("userData");
+      
       setIsAuthenticated(isLoggedIn);
+      if (storedUserData) {
+        setUserData(JSON.parse(storedUserData));
+      }
       setIsLoading(false);
     };
     checkIfUserIsLoggedIn();
   }, []);
 
-  const login = () => {
+  const login = (user) => {
     setIsAuthenticated(true);
+    setUserData(user);
     localStorage.setItem("isAuthenticated", "true");
+    localStorage.setItem("userData", JSON.stringify(user));
   };
 
   const logout = () => {
     setIsAuthenticated(false);
+    setUserData(null);
     // Clear all stored user data
     localStorage.removeItem("isAuthenticated");
-    localStorage.removeItem("username");
-    localStorage.removeItem("token");
+    localStorage.removeItem("userData");
   };
 
   // Show loading message while checking login status
@@ -36,9 +44,9 @@ export const AuthProvider = ({ children }) => {
     return <div>Loading...</div>;
   }
 
-  // Provide login state and functions to all children components
+  // Provide login state, user data, and functions to all children components
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, userData, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

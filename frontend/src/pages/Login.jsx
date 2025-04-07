@@ -32,7 +32,7 @@ const Login = () => {
       });
 
       if (response.status === 200) {
-        login();
+        login(response.data.user);
         navigate("/home");
       }
     } catch (err) {

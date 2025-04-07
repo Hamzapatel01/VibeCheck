@@ -4,7 +4,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import useMoodHistory from '../hooks/useMoodHistory';
 import { getMoodInsights, formatTimestamp } from '../utils/moodUtils';
 import { getChartData, chartOptions } from '../utils/chartConfig';
-import { useMood } from '../Context/MoodContext';
+import { useMood } from '../context/MoodContext';
 import MoodInsights from '../components/Report/MoodInsights';
 import MoodChart from '../components/Report/MoodChart';
 import MoodHistory from '../components/Report/MoodHistory';

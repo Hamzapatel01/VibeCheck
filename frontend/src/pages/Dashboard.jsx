@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMood } from '../context/MoodContext';
+import { useAuth } from '../context/AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faWalking, faBook, faMusic, faChartLine, faRobot, faHeart 
@@ -11,6 +12,7 @@ import { format } from 'date-fns';
 const Dashboard = () => {
   const navigate = useNavigate();
   const { moodHistory, isLoading, error, fetchMoodHistory } = useMood();
+  const { userData } = useAuth();
   const [moodInput, setMoodInput] = useState("");
   const [noteInput, setNoteInput] = useState("");
   const [showContent, setShowContent] = useState(null);
@@ -36,15 +38,13 @@ const Dashboard = () => {
     }
 
     try {
-      const token = localStorage.getItem("token");
       const formattedTimestamp = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
       
       const response = await axios.post("http://127.0.0.1:5000/log-mood", {
         mood: moodInput,
         note: noteInput,
-        timestamp: formattedTimestamp
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
+        timestamp: formattedTimestamp,
+        username: userData.username
       });
 
       if (response.status === 201) {
